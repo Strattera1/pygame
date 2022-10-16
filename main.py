@@ -1,6 +1,7 @@
 from turtle import Pen
 import pygame
 import random
+import math
 pygame.init()
 
 screen = pygame.display.set_mode((800,600))
@@ -31,6 +32,8 @@ laser_x_change = 0
 laser_y_change = 10
 laser_state = "ready"
 
+score = 0
+
 
 def player(x,y):
     screen.blit(player_img, (x, y))
@@ -43,6 +46,12 @@ def fire_laser(x,y):
     laser_state = "fire"
     screen.blit(laser_img, (x + 16,y +10))
 
+def Is_Collistion(enemy_x,enemy_y,laser_x,laser_y):
+    distance = math.sqrt(math.pow((enemy_x -laser_x,2)) + (math.pow(enemy_y - laser_y,2)))
+    if distance < 27:
+        return  True
+    else:
+        return False
 
 running = True
 while running:
@@ -95,6 +104,12 @@ while running:
         fire_laser (laser_x,laser_y) 
         laser_y -= laser_y_change
 
+    collison = Is_Collistion(enemy_x,enemy_y,laser_x,laser_y)
+    if collison:
+        laser_y = 480
+        laser_state = "ready"
+        score += 1
+        print (score)
     player(player_x,player_y)
     enemy(enemy_x,enemy_y)
     pygame.display.update()
